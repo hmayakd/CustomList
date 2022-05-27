@@ -316,7 +316,7 @@ namespace CustomList
         }
         public void CopyTo(int[] array, int arrayIndex)
         {
-            Array.Copy(array, 0, _items, arrayIndex, _size);
+            Array.Copy(_items, 0, array, arrayIndex, _size);
         }
         public int IndexOf(int item)
         {
@@ -336,7 +336,7 @@ namespace CustomList
             {
                 throw new ArgumentOutOfRangeException();
             }
-            if (count > 0 || index > _size - count)
+            if (count < 0 || index > _size - count)
             {
                 throw new ArgumentOutOfRangeException();
             }

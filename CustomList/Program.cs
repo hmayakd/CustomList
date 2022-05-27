@@ -33,6 +33,7 @@ namespace CustomList
             }
             int[] arr2 = new int[10]; 
             int[] arr3 = new int[11];
+            int[] arr4 = new int[17];
             _List _list2 = new _List(arr);
             _List _list3 = new _List();
             _list3.AddRange(arr);
@@ -57,19 +58,21 @@ namespace CustomList
             bool c = _list4.Contains(3);
 
             _list4.CopyTo(arr3);
-            _list1.CopyTo(arr, 3);
+            _list3.CopyTo(arr4, 6);
             _list2.CopyTo(2, arr, 3, 4);
 
+            _list4[7] = 3;
+            _list4[9] = 3;
             int b = _list3.IndexOf(3);
-            b = _list4.IndexOf(3, 2);
-            b = _list5.IndexOf(3, 2, 3);
+            b = _list4.IndexOf(3, 5);
+            b = _list4.IndexOf(3, 5, 4);
 
-            b = _list3.LastIndexOf(3);
-            b = _list4.LastIndexOf(3, 2);
-            b = _list5.LastIndexOf(3, 2, 3);
+            b = _list4.LastIndexOf(3);
+            b = _list4.LastIndexOf(3, 4);
+            b = _list4.LastIndexOf(3, 9, 3);
 
             
-            arr2 = _list.ToArray();
+            arr2 = _list2.ToArray();
 
             foreach (var item in _list2)
             {
