@@ -391,7 +391,7 @@ namespace CustomList
             Array.Copy(_items, 0, array, 0, _size);
             return array;
         }
-        public void EnsureCapacity(int min)
+        private void EnsureCapacity(int min)
         {
             if (_items.Length < min)
             {
