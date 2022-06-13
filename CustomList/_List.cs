@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace CustomList
 {
-    public class _List
+    public class _List<T>
     {
         private const int _defaultCapacity = 4;
-        public int[] _items;
+        public T[] _items;
         private int _size;
         private int _version;
-        static readonly int[] _emptyArray = new int[0];
+        static readonly T[] _emptyArray = new T[0];
         public _List()
         {
             _items = _emptyArray;
@@ -22,15 +22,15 @@ namespace CustomList
             if (capacity == 0)
                 _items = _emptyArray;
             else
-                _items = new int[capacity];
+                _items = new T[capacity];
         }
-        public _List(IEnumerable<int> collection)
+        public _List(IEnumerable<T> collection)
         {
             if (collection == null)
             {
                 throw new ArgumentNullException();
             }
-            ICollection<int> c = collection as ICollection<int>;
+            ICollection<T> c = collection as ICollection<T>;
             if (c != null)
             {
                 int count = c.Count;
@@ -40,7 +40,7 @@ namespace CustomList
                 }
                 else
                 {
-                    _items = new int[count];
+                    _items = new T[count];
                     c.CopyTo(_items, 0);
                     _size = count;
                 }
@@ -49,7 +49,7 @@ namespace CustomList
             {
                 _size = 0;
                 _items = _emptyArray;
-                using (IEnumerator<int> en = collection.GetEnumerator())
+                using (IEnumerator<T> en = collection.GetEnumerator())
                 {
                     while (en.MoveNext())
                     {
@@ -59,7 +59,7 @@ namespace CustomList
             }
 
         }
-        public int this[int index]
+        public T this[int index]
         {
             get
             {
@@ -95,7 +95,7 @@ namespace CustomList
                 {
                     if (value > 0)
                     {
-                        int[] newItems = new int[value];
+                        T[] newItems = new T[value];
                         if (_size > 0)
                         {
                             Array.Copy(_items, 0, newItems, 0, _size);
@@ -120,17 +120,17 @@ namespace CustomList
         {
             return (value is int);
         }
-        public void Add(int item)
+        public void Add(T item)
         {
             if (_size == _items.Length) EnsureCapacity(_size + 1);
             _items[_size++] = item;
             _version++;
         }
-        public void AddRange(IEnumerable<int> collection)
+        public void AddRange(IEnumerable<T> collection)
         {
             InsertRange(_size, collection);
         }
-        public void Insert(int index, int item)
+        public void Insert(int index, T item)
         {
             if ((uint)index > (uint)_size)
             {
@@ -148,7 +148,7 @@ namespace CustomList
             _size++;
             _version++;
         }
-        public void InsertRange(int index, IEnumerable<int> collection)
+        public void InsertRange(int index, IEnumerable<T> collection)
         {
             if (collection == null)
             {
@@ -158,7 +158,7 @@ namespace CustomList
             {
                 throw new IndexOutOfRangeException();
             }
-            ICollection<int> c = collection as ICollection<int>;
+            ICollection<T> c = collection as ICollection<T>;
             if (c != null)
             {
                 int count = c.Count;
@@ -176,7 +176,7 @@ namespace CustomList
                     }
                     else
                     {
-                        int[] itemsToInsert = new int[count];
+                        T[] itemsToInsert = new T[count];
                         c.CopyTo(itemsToInsert, 0);
                         itemsToInsert.CopyTo(_items, index);
                     }
@@ -185,7 +185,7 @@ namespace CustomList
             }
             else
             {
-                using (IEnumerator<int> en = collection.GetEnumerator())
+                using (IEnumerator<T> en = collection.GetEnumerator())
                 {
                     while (en.MoveNext())
                     {
@@ -195,7 +195,7 @@ namespace CustomList
             }
             _version++;
         }
-        public bool Remove(int item)
+        public bool Remove(T item)
         {
             int index = IndexOf(item);
             if (index >= 0)
@@ -216,7 +216,7 @@ namespace CustomList
             {
                 Array.Copy(_items, index + 1, _items, index, _size - index);
             }
-            _items[_size] = default(int);
+            _items[_size] = default(T);
             _version++;
         }
         public void RemoveRange(int index, int count)
@@ -275,7 +275,7 @@ namespace CustomList
             }
             _version++;
         }
-        public bool Contains(int item)
+        public bool Contains(T item)
         {
             if ((Object)item == null)
             {
@@ -290,7 +290,7 @@ namespace CustomList
             }
             else
             {
-                EqualityComparer<int> c = EqualityComparer<int>.Default;
+                EqualityComparer<T> c = EqualityComparer<T>.Default;
                 for (int i = 0; i < _size; i++)
                 {
                     if (c.Equals(_items[i], item))
@@ -302,11 +302,11 @@ namespace CustomList
                 return false;
             }
         }
-        public void CopyTo(int[] array)
+        public void CopyTo(T[] array)
         {
             CopyTo(array, 0);
         }
-        public void CopyTo(int index, int[] array, int arrayIndex, int count)
+        public void CopyTo(int index, T[] array, int arrayIndex, int count)
         {
             if (_size - index < count)
             {
@@ -314,15 +314,15 @@ namespace CustomList
             }
             Array.Copy(_items, index, array, arrayIndex, count);
         }
-        public void CopyTo(int[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             Array.Copy(_items, 0, array, arrayIndex, _size);
         }
-        public int IndexOf(int item)
+        public int IndexOf(T item)
         {
             return Array.IndexOf(_items, item, 0, _size);
         }
-        public int IndexOf(int item, int index)
+        public int IndexOf(T item, int index)
         {
             if (index > _size)
             {
@@ -330,7 +330,7 @@ namespace CustomList
             }
             return Array.IndexOf(_items, item, index, _size - index);
         }
-        public int IndexOf(int item, int index, int count)
+        public int IndexOf(T item, int index, int count)
         {
             if (index > _size)
             {
@@ -342,7 +342,7 @@ namespace CustomList
             }
             return Array.IndexOf(_items, item, index, count);
         }
-        public int LastIndexOf(int item)
+        public int LastIndexOf(T item)
         {
             if (_size == 0)
             {
@@ -353,7 +353,7 @@ namespace CustomList
                 return LastIndexOf(item, _size - 1, _size);
             }
         }
-        public int LastIndexOf(int item, int index)
+        public int LastIndexOf(T item, int index)
         {
             if (index >= _size)
             {
@@ -361,7 +361,7 @@ namespace CustomList
             }
             return LastIndexOf(item, index, index + 1);
         }
-        public int LastIndexOf(int item, int index, int count)
+        public int LastIndexOf(T item, int index, int count)
         {
             if ((Count != 0) && (index < 0))
             {
@@ -385,9 +385,9 @@ namespace CustomList
             }
             return Array.LastIndexOf(_items, item, index, count);
         }
-        public int[] ToArray()
+        public T[] ToArray()
         {
-            int[] array = new int[_size];
+            T[] array = new T[_size];
             Array.Copy(_items, 0, array, 0, _size);
             return array;
         }
@@ -408,20 +408,20 @@ namespace CustomList
         }
         public class Enumerator : IEnumerator
         {
-            private _List list;
+            private _List<T> list;
             private int index;
             private int version;
-            private int current;
-            public Enumerator(_List list)
+            private T current;
+            public Enumerator(_List<T> list)
             {
                 this.list = list;
                 index = 0;
                 version = list._version;
-                current = default(int);
+                current = default(T);
             }
             public bool MoveNext()
             {
-                _List localList = list;
+                _List<T> localList = list;
                 if (version == localList._version && (uint)index < (uint)localList._size)
                 {
                     current = localList._items[index];
@@ -437,7 +437,7 @@ namespace CustomList
                     throw new InvalidOperationException();
                 }
                 index = list._size + 1;
-                current = default(int);
+                current = default(T);
                 return false;
             }
             public object Current
@@ -458,7 +458,7 @@ namespace CustomList
                     throw new InvalidOperationException();
                 }
                 index = 0;
-                current = default(int);
+                current = default(T);
             }
         }
     }
